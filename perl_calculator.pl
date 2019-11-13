@@ -7,7 +7,7 @@ use strict;
 
 my $mw = MainWindow->new;
 $mw->Label(-text => 'Perl Calculator')->pack;
-$mw->Entry(-width => 40) -> pack;
+my $entry = $mw->Entry(-width => 40) -> pack;
 
 #Placing Calculator Sections within a grd
 my $mainGrid = $mw->Frame()->grid(-row=>10, -column=>10);
@@ -19,62 +19,104 @@ $mainGrid->pack;
 my $numbers = $mainGrid->Frame(
 ) -> grid(-row => 3, -column => 4);
 
-my @numKeys = ('1','2','3','4','5','6','7','8','9','0', '.', '+/-');
+$numbers ->Button(
+    -text => '1',
+    -command => sub{ $entry->insert(length($entry->get), '1') },
+)->grid(-row => 0, -column => 0);
 
-my $row = 0;
-my $col = 0;
-my $key;
+$numbers ->Button(
+    -text => '2',
+    -command => sub{ $entry->insert(length($entry->get), '2') },
+)->grid(-row => 0, -column => 1);
 
-foreach(@numKeys){
-    $key = $_;
-    $numbers->Button(
-        -text => $key
-    )->grid(-row=> $row, -column=> $col);
+$numbers ->Button(
+    -text => '3',
+    -command => sub{ $entry->insert(length($entry->get), '3') },
+)->grid(-row => 0, -column => 2);
 
-    $col++;
-    if($col == 3){
-        $row++;
-        $col = 0;
-    }
+$numbers ->Button(
+    -text => '4',
+    -command => sub{ $entry->insert(length($entry->get), '4') },
+)->grid(-row => 1, -column => 0);
 
-}
+$numbers ->Button(
+    -text => '5',
+    -command => sub{ $entry->insert(length($entry->get), '5') },
+)->grid(-row => 1, -column => 1);
+
+$numbers ->Button(
+    -text => '6',
+    -command => sub{ $entry->insert(length($entry->get), '6') },
+)->grid(-row => 1, -column => 2);
+
+$numbers ->Button(
+    -text => '7',
+    -command => sub{ $entry->insert(length($entry->get), '7') },
+)->grid(-row => 2, -column => 0);
+
+$numbers ->Button(
+    -text => '8',
+    -command => sub{ $entry->insert(length($entry->get), '8') },
+)->grid(-row => 2, -column => 1);
+
+$numbers ->Button(
+    -text => '9',
+    -command => sub{ $entry->insert(length($entry->get), '9') },
+)->grid(-row => 2, -column => 2);
+
+$numbers ->Button(
+    -text => '0',
+    -command => sub{ $entry->insert(length($entry->get), '0') },
+)->grid(-row => 3, -column => 0);
+
+$numbers ->Button(
+    -text => '.',
+    -command => sub{ $entry->insert(length($entry->get), '.') },
+)->grid(-row => 3, -column => 1);
+
+
+$numbers ->Button(
+    -text => '+/-',
+)->grid(-row => 3, -column => 2);
+
 
 #################################################################################
 
 my $trig = $mainGrid->Frame()->grid(-row=>1 , -column=>3);
 
-my @trigEq = ('sin', 'cos', 'tan');
-$row = 0;
-$col = 0;
+$trig->Button(
+    -text=> 'sin'
+)->grid(-row => 0, -column=> 0);
 
-foreach(@trigEq){
-    $key = $_;
-    $trig->Button(
-        -text=> $_
-    )->grid(-row => $row, -column=> $col);
+$trig->Button(
+    -text=> 'cos'
+)->grid(-row => 0, -column=> 1);
 
-    $col++;
-}
+
+$trig->Button(
+    -text=> 'tan'
+)->grid(-row => 0, -column=> 2);
 
 ##############################################################################
 
 my $basicOperations = $mainGrid->Frame()->grid(-row=>4, -column=>1);
 
-my @operationKey = ('/', '+', '-', '*');
+$basicOperations->Button(
+    -text=> '/'
+)->grid(-row=>0);
 
-$col = 0;
-$row = 0;
+$basicOperations->Button(
+    -text=> '+'
+)->grid(-row=>1);
 
-foreach(@operationKey){
-    $key = $_;
-    $basicOperations->Button(
-        -text=> $key
-    )->grid(-row=>$row);
-    $row++;
-}
+$basicOperations->Button(
+    -text=> '-'
+)->grid(-row=>2);
 
+$basicOperations->Button(
+    -text=> '*'
+)->grid(-row=>3);
 ###############################################################################
-#TODO Finish turning these into loops you'll fill
 
 my $clearCancelOK = $mainGrid->Frame()->grid(-row=>1, -column=>3);
 
@@ -113,7 +155,7 @@ $functions->Button(
 ####################################################################################
 
 #put grid of buttons into main grid
-$clearCancelOK->grid(-row=>7, -column=>5);
+$clearCancelOK->grid(-row=>8, -column=>5);
 $functions->grid(-row=>9, -column=>4);
 $numbers->grid(-row=> 9, -column=>5);
 $trig->grid(-row=> 8, -column=> 5);
@@ -121,4 +163,4 @@ $basicOperations->grid(-row=>9, -column=>6);
 
 
 
-MainLoop;
+MainLoop; 
