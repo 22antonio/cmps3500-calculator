@@ -1,6 +1,10 @@
+#!/usr/bin/perl -w  
 # must have perl-tk install
 # sudo apt-get install perl-tk
-#!/usr/bin/perl -w  
+
+#todo add parentheses
+#todo parse input and make it compute based on parsed input
+
 use Tk;
 use strict;
 
@@ -77,6 +81,21 @@ $numbers ->Button(
 
 $numbers ->Button(
     -text => '+/-',
+    -command => sub{
+        my $tempString;
+        my $sign = substr($entry->get, 0, 1);
+
+        if($sign eq '-'){
+            $tempString = substr($entry->get, 1, length($entry->get));
+            $entry->delete(0, length($entry->get));
+            $entry->insert(0, $tempString);
+        }else{
+            $tempString = $entry->get;
+            $entry->delete(0, length($entry->get));
+            $entry->insert(0, '-');
+            $entry->insert(1, $tempString);
+        }
+    },
 )->grid(-row => 3, -column => 2);
 
 
@@ -85,16 +104,19 @@ $numbers ->Button(
 my $trig = $mainGrid->Frame()->grid(-row=>1 , -column=>3);
 
 $trig->Button(
-    -text=> 'sin'
+    -text=> 'sin',
+    -command => sub{ $entry->insert(length($entry->get), 'sin(') },
 )->grid(-row => 0, -column=> 0);
 
 $trig->Button(
-    -text=> 'cos'
+    -text=> 'cos',
+    -command => sub{ $entry->insert(length($entry->get), 'cos(') },
 )->grid(-row => 0, -column=> 1);
 
 
 $trig->Button(
-    -text=> 'tan'
+    -text=> 'tan',
+    -command => sub{ $entry->insert(length($entry->get), 'tan(') },
 )->grid(-row => 0, -column=> 2);
 
 ##############################################################################
@@ -102,34 +124,49 @@ $trig->Button(
 my $basicOperations = $mainGrid->Frame()->grid(-row=>4, -column=>1);
 
 $basicOperations->Button(
-    -text=> '/'
+    -text=> '/',
+    -command => sub{ $entry->insert(length($entry->get), '/') },
 )->grid(-row=>0);
 
 $basicOperations->Button(
-    -text=> '+'
+    -text=> '+',
+    -command => sub{ $entry->insert(length($entry->get), '+') },
 )->grid(-row=>1);
 
 $basicOperations->Button(
-    -text=> '-'
+    -text=> '-',
+    -command => sub{ $entry->insert(length($entry->get), '-') },
 )->grid(-row=>2);
 
 $basicOperations->Button(
-    -text=> '*'
+    -text=> '*',
+    -command => sub{ $entry->insert(length($entry->get), '*') },
 )->grid(-row=>3);
 ###############################################################################
 
 my $clearCancelOK = $mainGrid->Frame()->grid(-row=>1, -column=>3);
 
 $clearCancelOK->Button(
-    -text=> 'Clear'
+    -text=> 'Clear',
+    -command => sub{ 
+        $entry->delete(0, length($entry->get))
+    },
 )->grid(-column=>0, -row=>0);
 
 $clearCancelOK->Button(
-    -text=> 'Cancel'
+    -text=> 'Cancel',
+    -command => sub{ 
+        $entry->delete(length($entry->get) - 1, length($entry->get))
+    },
 )->grid(-column=>1, -row=>0);
 
 $clearCancelOK->Button(
-    -text=> 'Ok'
+    -text=> 'Ok',
+    -command => sub{ 
+        # TODO some sort of parsing to update to value
+
+        $entry->delete(0, length($entry->get))
+    },
 )->grid(-column=>2, -row=>0);
 
 ####################################################################################
@@ -137,28 +174,32 @@ $clearCancelOK->Button(
 my $functions = $mainGrid->Frame()->grid(-row=>4, -column=>1);
 
 $functions->Button(
-    -text=> "exp"
+    -text=> "exp",
+    -command => sub{ $entry->insert(length($entry->get), 'exp(') },
 )->grid(-row=>0, -column=>0);
 
 $functions->Button(
-    -text=>"ln"
+    -text=>"ln",
+    -command => sub{ $entry->insert(length($entry->get), 'ln(') },
 )->grid(-row=>1, -column=>0);
 
 $functions->Button(
-    -text=>"sqrt"
+    -text=>"sqrt",
+    -command => sub{ $entry->insert(length($entry->get), 'sqrt(') },
 )->grid(-row=>2, -column=>0);
 
 $functions->Button(
-    -text=>"sq"
+    -text=>"sq",
+    -command => sub{ $entry->insert(length($entry->get), 'sq') },
 )->grid(-row=>3, -column=>0);
 
 ####################################################################################
 
 #put grid of buttons into main grid
-$clearCancelOK->grid(-row=>8, -column=>5);
+$clearCancelOK->grid(-row=>7, -column=>5);
+$trig->grid(-row=> 8, -column=> 5);
 $functions->grid(-row=>9, -column=>4);
 $numbers->grid(-row=> 9, -column=>5);
-$trig->grid(-row=> 8, -column=> 5);
 $basicOperations->grid(-row=>9, -column=>6);
 
 
