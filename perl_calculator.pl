@@ -10,77 +10,112 @@ use strict;
 
 
 my $mw = MainWindow->new;
+$mw->geometry("480x450+0+0");
 $mw->Label(-text => 'Perl Calculator')->pack;
+$mw->optionAdd('*font', 'Helvetica 30');
 my $entry = $mw->Entry(-width => 40) -> pack;
 
-#Placing Calculator Sections within a grd
-my $mainGrid = $mw->Frame()->grid(-row=>10, -column=>10);
 
-$mainGrid->pack;
+#Placing Calculator Sections within a grd
+#my $mainGrid = $mw->Frame()->grid(-row=>10, -column=>10);
+
+#$mainGrid->pack;
+
+my $calcGrid = $mw->Frame()->grid(
+    -row => 6,
+    -column => 5
+);
 
 ##############################################################################################
 # Numbers Frame/grid
-my $numbers = $mainGrid->Frame(
-) -> grid(-row => 3, -column => 4);
+# my $numbers = $mw->Frame() -> grid(
+#     -row => 3,
+#     -column => 4,
+#      );
 
-$numbers ->Button(
+$calcGrid->Button(
+    -text => '(',
+    -width => 3,
+    -command => sub{ $entry->insert(length($entry->get), '(') },
+)->grid(-row => 2, -column => 3);
+
+$calcGrid->Button(
+    -text => ')',
+    -width => 3,
+    -command => sub{ $entry->insert(length($entry->get), ')') },
+)->grid(-row => 2, -column => 4);
+
+$calcGrid ->Button(
     -text => '1',
+    -width => 3,
     -command => sub{ $entry->insert(length($entry->get), '1') },
-)->grid(-row => 0, -column => 0);
+)->grid(-row => 5, -column => 1);
 
-$numbers ->Button(
+$calcGrid ->Button(
     -text => '2',
+    -width => 3,
     -command => sub{ $entry->insert(length($entry->get), '2') },
-)->grid(-row => 0, -column => 1);
+)->grid(-row => 5, -column => 2);
 
-$numbers ->Button(
+$calcGrid ->Button(
     -text => '3',
+    -width => 3,
     -command => sub{ $entry->insert(length($entry->get), '3') },
-)->grid(-row => 0, -column => 2);
+)->grid(-row => 5, -column => 3);
 
-$numbers ->Button(
+$calcGrid ->Button(
     -text => '4',
+    -width => 3,
     -command => sub{ $entry->insert(length($entry->get), '4') },
-)->grid(-row => 1, -column => 0);
+)->grid(-row => 4, -column => 1);
 
-$numbers ->Button(
+$calcGrid ->Button(
     -text => '5',
+    -width => 3,
     -command => sub{ $entry->insert(length($entry->get), '5') },
-)->grid(-row => 1, -column => 1);
+)->grid(-row => 4, -column => 2);
 
-$numbers ->Button(
+$calcGrid ->Button(
     -text => '6',
+    -width => 3,
     -command => sub{ $entry->insert(length($entry->get), '6') },
-)->grid(-row => 1, -column => 2);
+)->grid(-row => 4, -column => 3);
 
-$numbers ->Button(
+$calcGrid ->Button(
     -text => '7',
+    -width => 3,
     -command => sub{ $entry->insert(length($entry->get), '7') },
-)->grid(-row => 2, -column => 0);
-
-$numbers ->Button(
-    -text => '8',
-    -command => sub{ $entry->insert(length($entry->get), '8') },
-)->grid(-row => 2, -column => 1);
-
-$numbers ->Button(
-    -text => '9',
-    -command => sub{ $entry->insert(length($entry->get), '9') },
-)->grid(-row => 2, -column => 2);
-
-$numbers ->Button(
-    -text => '0',
-    -command => sub{ $entry->insert(length($entry->get), '0') },
-)->grid(-row => 3, -column => 0);
-
-$numbers ->Button(
-    -text => '.',
-    -command => sub{ $entry->insert(length($entry->get), '.') },
 )->grid(-row => 3, -column => 1);
 
+$calcGrid ->Button(
+    -text => '8',
+    -width => 3,
+    -command => sub{ $entry->insert(length($entry->get), '8') },
+)->grid(-row => 3, -column => 2);
 
-$numbers ->Button(
+$calcGrid ->Button(
+    -text => '9',
+    -width => 3,
+    -command => sub{ $entry->insert(length($entry->get), '9') },
+)->grid(-row => 3, -column => 3);
+
+$calcGrid ->Button(
+    -text => '0',
+    -width => 3,
+    -command => sub{ $entry->insert(length($entry->get), '0') },
+)->grid(-row => 6, -column => 1);
+
+$calcGrid ->Button(
+    -text => '.',
+    -width => 3,
+    -command => sub{ $entry->insert(length($entry->get), '.') },
+)->grid(-row => 6, -column => 2);
+
+
+
+$calcGrid ->Button(
     -text => '+/-',
+    -width => 3,
     -command => sub{
         my $tempString;
         my $sign = substr($entry->get, 0, 1);
@@ -96,112 +131,172 @@ $numbers ->Button(
             $entry->insert(1, $tempString);
         }
     },
-)->grid(-row => 3, -column => 2);
+)->grid(-row => 6, -column => 3);
+
+# my $cols;
+# my $rows; 
+# ($cols, $rows) = $numbers->gridSize();
+# print $cols . $rows;
+
+# for(my $i = 0; $i < $cols; $i++){
+#     $numbers->gridColumnconfigure($i, -weight => 4);
+# }
 
 
 #################################################################################
 
-my $trig = $mainGrid->Frame()->grid(-row=>1 , -column=>3);
+# my $trig = $mw->Frame()->grid(-row=>1 , -column=>3);
 
-$trig->Button(
+$calcGrid->Button(
     -text=> 'sin',
+    -width => 3,
     -command => sub{ $entry->insert(length($entry->get), 'sin(') },
-)->grid(-row => 0, -column=> 0);
+)->grid(-row => 2, -column=> 0);
 
-$trig->Button(
+$calcGrid->Button(
     -text=> 'cos',
+    -width => 3,
     -command => sub{ $entry->insert(length($entry->get), 'cos(') },
-)->grid(-row => 0, -column=> 1);
+)->grid(-row=> 2, -column => 1);
 
 
-$trig->Button(
+$calcGrid->Button(
     -text=> 'tan',
+    -width => 3,
     -command => sub{ $entry->insert(length($entry->get), 'tan(') },
-)->grid(-row => 0, -column=> 2);
+)->grid(-row=> 2, -column => 2);
 
-##############################################################################
+# ##############################################################################
 
-my $basicOperations = $mainGrid->Frame()->grid(-row=>4, -column=>1);
+# my $basicOperations = $mw->Frame()->grid(
+#     -row=>4, 
+#     -column=>1
+#     );
 
-$basicOperations->Button(
+$calcGrid->Button(
     -text=> '/',
+    -width => 3,
     -command => sub{ $entry->insert(length($entry->get), '/') },
-)->grid(-row=>0);
+)->grid(-row=>3, -column => 4);
 
-$basicOperations->Button(
+$calcGrid->Button(
     -text=> '+',
+    -width => 3,
     -command => sub{ $entry->insert(length($entry->get), '+') },
-)->grid(-row=>1);
+)->grid(-row=>4, -column => 4);
 
-$basicOperations->Button(
+$calcGrid->Button(
     -text=> '-',
+    -width => 3,
     -command => sub{ $entry->insert(length($entry->get), '-') },
-)->grid(-row=>2);
+)->grid(-row=>5, -column => 4);
 
-$basicOperations->Button(
+$calcGrid->Button(
     -text=> '*',
+    -width => 3,
     -command => sub{ $entry->insert(length($entry->get), '*') },
-)->grid(-row=>3);
-###############################################################################
+)->grid(-row=>6, -column => 4);
+# ###############################################################################
 
-my $clearCancelOK = $mainGrid->Frame()->grid(-row=>1, -column=>3);
+my $clearCancelOK = $mw->Frame()->grid(
+    -row=>1, 
+    -column=>3,
+    );
 
-$clearCancelOK->Button(
-    -text=> 'Clear',
-    -command => sub{ 
-        $entry->delete(0, length($entry->get))
-    },
-)->grid(-column=>0, -row=>0);
-
-$clearCancelOK->Button(
-    -text=> 'Cancel',
-    -command => sub{ 
-        $entry->delete(length($entry->get) - 1, length($entry->get))
-    },
-)->grid(-column=>1, -row=>0);
 
 $clearCancelOK->Button(
     -text=> 'Ok',
+    -width => 5,
+    -padx => 21,
     -command => sub{ 
         # TODO some sort of parsing to update to value
 
         $entry->delete(0, length($entry->get))
     },
+)->grid(-column=>3, -row=>0);
+
+$clearCancelOK->Button(
+    -text=> 'Cancel',
+    -width => 5,
+    -padx => 21,
+    -command => sub{ 
+        $entry->delete(length($entry->get) - 1, length($entry->get))
+    },
 )->grid(-column=>2, -row=>0);
 
-####################################################################################
+$clearCancelOK->Button(
+    -text=> 'Clear',
+    -width => 5,
+    -padx => 21,
+    -command => sub{ 
+        $entry->delete(0, length($entry->get))
+    },
+)->grid(-column=>1, -row=>0);
+# ####################################################################################
 
-my $functions = $mainGrid->Frame()->grid(-row=>4, -column=>1);
+# my $functions = $mw->Frame()->grid(
+#     -row=>4,
+#     -column=>1
+#      );
 
-$functions->Button(
+$calcGrid->Button(
     -text=> "exp",
+    -width => 3,
     -command => sub{ $entry->insert(length($entry->get), 'exp(') },
-)->grid(-row=>0, -column=>0);
-
-$functions->Button(
-    -text=>"ln",
-    -command => sub{ $entry->insert(length($entry->get), 'ln(') },
-)->grid(-row=>1, -column=>0);
-
-$functions->Button(
-    -text=>"sqrt",
-    -command => sub{ $entry->insert(length($entry->get), 'sqrt(') },
-)->grid(-row=>2, -column=>0);
-
-$functions->Button(
-    -text=>"sq",
-    -command => sub{ $entry->insert(length($entry->get), 'sq') },
 )->grid(-row=>3, -column=>0);
 
+$calcGrid->Button(
+    -text=>"ln",
+    -width => 3,
+    -command => sub{ $entry->insert(length($entry->get), 'ln(') },
+)->grid(-row=>4, -column=>0);
+
+$calcGrid->Button(
+    -text=>"sqrt",
+    -width => 3,
+    -command => sub{ $entry->insert(length($entry->get), 'sqrt(') },
+)->grid(-row=>5, -column=>0);
+
+$calcGrid->Button(
+    -text=>"sq",
+    -width => 3,
+    -command => sub{ $entry->insert(length($entry->get), 'sq(') },
+)->grid(-row=>6, -column=>0);
+
 ####################################################################################
 
-#put grid of buttons into main grid
-$clearCancelOK->grid(-row=>7, -column=>5);
-$trig->grid(-row=> 8, -column=> 5);
-$functions->grid(-row=>9, -column=>4);
-$numbers->grid(-row=> 9, -column=>5);
-$basicOperations->grid(-row=>9, -column=>6);
+# #put grid of buttons into main grid
+# $clearCancelOK->grid(-row=>7, -column=>5);
+# $trig->grid(-row=> 8, -column=> 5);
+# $functions->grid(-row=>9, -column=>4);
+# $numbers->grid(-row=> 9, -column=>5);
+# $basicOperations->grid(-row=>9, -column=>6);
 
+#put grid of buttons into main grid
+
+#$clearCancelOK->pack(-side => 'top', -anchor=> 'nw',);
+#
+#$trig->pack(-side => 'top', -anchor=> 'w', -after=>$clearCancelOK);
+#
+#$functions->pack(-side => 'top', -anchor=> 'n');
+#
+#$numbers->pack(-side => 'left', -anchor=> 'center', );
+#
+#$basicOperations->pack(-side => 'right',);
+#
+
+my $cols;
+my $rows; 
+($cols, $rows) = $calcGrid->gridSize();
+#print $cols . $rows;
+
+for(my $i = 0; $i < $cols; $i++){
+    $calcGrid->gridColumnconfigure($i, -uniform => 1);
+}
+
+
+$clearCancelOK->pack(-anchor => 'nw');
+$calcGrid->pack(-anchor => 'nw');
 
 
 MainLoop; 
