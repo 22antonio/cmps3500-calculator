@@ -2,12 +2,12 @@
 # must have perl-tk install
 # sudo apt-get install perl-tk
 
-#todo add parentheses
+# must have https://metacpan.org/pod/Math::Expression::Evaluator
+
 #todo parse input and make it compute based on parsed input
 
 use Tk;
 use strict;
-
 
 my $mw = MainWindow->new;
 $mw->geometry("480x450+0+0");
@@ -211,6 +211,34 @@ $clearCancelOK->Button(
     -command => sub{ 
         # TODO some sort of parsing to update to value
 
+        my $parenthese = 0;
+        for my $character (split //, $entry->get) {
+            if($character eq '(' or $character eq ')'){
+                $parenthese++;
+            }
+        }
+        if(($parenthese % 2) == 1){
+            print "Error\n";
+        }
+
+        my @subEquations;
+        my $copyBool = 0;
+        for my $character (split //, $entry->get) {
+            push @subEquations, $character;
+        }
+        
+        my $i = 0;
+        
+
+
+        
+
+        print @subEquations;
+        print "\n";
+
+
+
+
         $entry->delete(0, length($entry->get))
     },
 )->grid(-column=>3, -row=>0);
@@ -265,35 +293,14 @@ $calcGrid->Button(
 
 ####################################################################################
 
-# #put grid of buttons into main grid
-# $clearCancelOK->grid(-row=>7, -column=>5);
-# $trig->grid(-row=> 8, -column=> 5);
-# $functions->grid(-row=>9, -column=>4);
-# $numbers->grid(-row=> 9, -column=>5);
-# $basicOperations->grid(-row=>9, -column=>6);
-
-#put grid of buttons into main grid
-
-#$clearCancelOK->pack(-side => 'top', -anchor=> 'nw',);
-#
-#$trig->pack(-side => 'top', -anchor=> 'w', -after=>$clearCancelOK);
-#
-#$functions->pack(-side => 'top', -anchor=> 'n');
-#
-#$numbers->pack(-side => 'left', -anchor=> 'center', );
-#
-#$basicOperations->pack(-side => 'right',);
-#
 
 my $cols;
 my $rows; 
 ($cols, $rows) = $calcGrid->gridSize();
-#print $cols . $rows;
 
 for(my $i = 0; $i < $cols; $i++){
     $calcGrid->gridColumnconfigure($i, -uniform => 1);
 }
-
 
 $clearCancelOK->pack(-anchor => 'nw');
 $calcGrid->pack(-anchor => 'nw');
