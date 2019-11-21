@@ -211,37 +211,67 @@ $clearCancelOK->Button(
     -command => sub{ 
         # TODO some sort of parsing to update to value
 
-        my $parenthese = 0;
-        for my $character (split //, $entry->get) {
-            if($character eq '(' or $character eq ')'){
-                $parenthese++;
+    # Look into these
+    # Recursive-descent recognition
+    # The shunting yard algorithm
+    # The classic solution
+    # Precedence climbing
+
+        # splits each part of the input into a token for algorithm
+        my @temp = split(/(\()|(\))|(\*)|(-)|(\+)|(\/)|(\d+\.?\d*)|(tan)|(sin)|(cos)|(exp)|(ln)|(sqrt)|(sq)|/,$entry->get);
+        my @equation;
+        foreach(@temp){
+            if($_){
+                push @equation, $_;
             }
         }
-        if(($parenthese % 2) == 1){
-            print "Error\n";
+        foreach(@equation){
+            print $_ . "\n";
         }
+        print "=============================\n";
 
-        my @subEquations;
-        my $copyBool = 0;
-        for my $character (split //, $entry->get) {
-            push @subEquations, $character;
+        my @operatorStack;
+        my @numberStack;
+
+        while(@equation){
+            my $currentToken = pop @equation;
+
+            # if current token is a number
+            if ($currentToken =~ /(\d+\.?\d*)/){ 
+                push @numberStack, $currentToken;
+            }
+            # is a function
+            if($currentToken =~ /(tan)|(sin)|(cos)|(exp)|(ln)|(sqrt)|(sq)/){
+                push @operatorStack, $currentToken
+            }
+            # is an operator
+            if($currentToken =~ /(\*)|(-)|(\+)|(\/)/){
+                # while(
+                #     ($operatorStack[-1] =~ /(tan)|(sin)|(cos)|(exp)|(ln)|(sqrt)|(sq)/) or
+                #     #($operatorStack[-1] > )
+                # )
+            }
         }
         
-        my $i = 0;
-        
-
-
-        
-
-        print @subEquations;
-        print "\n";
-
-
 
 
         $entry->delete(0, length($entry->get))
     },
 )->grid(-column=>3, -row=>0);
+
+#shift grabs argument 1, should only be 1 arg to function
+sub checkPrecedence{
+    my $toCheck = shift;
+    my $precedenceToRet = 1;
+    if ($toCheck eq '*' or $toCheck eq '/'){
+        $precedenceToRet = 3;
+    }
+    elsif($toCheck eq '+' or $toCheck eq '-'){
+        $precedenceToRet = 2;
+    }
+
+    return $precedenceToRet;
+}
 
 $clearCancelOK->Button(
     -text=> 'Cancel',
