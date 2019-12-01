@@ -8,6 +8,7 @@
 
 use Tk;
 use strict;
+use Math::Trig;
 
 my $mw = MainWindow->new;
 $mw->geometry("480x450+0+0");
@@ -211,51 +212,61 @@ $clearCancelOK->Button(
     -command => sub{ 
         # TODO some sort of parsing to update to value
 
-    # Look into these
-    # Recursive-descent recognition
-    # The shunting yard algorithm
-    # The classic solution
-    # Precedence climbing
-
-        # splits each part of the input into a token for algorithm
-        my @temp = split(/(\()|(\))|(\*)|(-)|(\+)|(\/)|(\d+\.?\d*)|(tan)|(sin)|(cos)|(exp)|(ln)|(sqrt)|(sq)|/,$entry->get);
+        my @temp = split(/(\()|(\))|(\*)|(-)|(\+)|(\/)|(\d+\.?\d*)|(tan)|(sin)|(cos)|(exp)|(ln)|(sqrt)|(^)|/,$entry->get);
         my @equation;
+        my $trigFlag = 0;
+        my $trigParenCounter = 0;
+        my $maxTrigParen = 0;
+        
         foreach(@temp){
             if($_){
-                push @equation, $_;
+
+                if($_ eq "^"){
+                    push @equation, "**";
+                }else{
+
+                    push @equation, $_;
+                    if($_ eq "tan" or $_ eq "sin" or $_ eq "cos"){
+                        push @equation, "(deg2rad";
+                        $trigFlag = 1;
+                        $trigParenCounter += 1;
+                        $maxTrigParen += 1;
+                    }
+
+                    if($_ eq ")" and $trigFlag == 1){
+                        $trigParenCounter -= 1;
+
+                        if($trigParenCounter == 0){
+                            while($maxTrigParen > 0){
+                                push @equation, ")";
+                                $maxTrigParen -= 1;
+                            }
+                        }
+                    }
+
+                }
             }
         }
+    
+
+        print(@equation);
+        print("\n");
+
+        my $problem = "";
+
         foreach(@equation){
-            print $_ . "\n";
+             if($_){
+                 $problem .= $_;
+             }
         }
-        print "=============================\n";
 
-        my @operatorStack;
-        my @numberStack;
-
-        while(@equation){
-            my $currentToken = pop @equation;
-
-            # if current token is a number
-            if ($currentToken =~ /(\d+\.?\d*)/){ 
-                push @numberStack, $currentToken;
-            }
-            # is a function
-            if($currentToken =~ /(tan)|(sin)|(cos)|(exp)|(ln)|(sqrt)|(sq)/){
-                push @operatorStack, $currentToken
-            }
-            # is an operator
-            if($currentToken =~ /(\*)|(-)|(\+)|(\/)/){
-                # while(
-                #     ($operatorStack[-1] =~ /(tan)|(sin)|(cos)|(exp)|(ln)|(sqrt)|(sq)/) or
-                #     #($operatorStack[-1] > )
-                # )
-            }
-        }
-        
+        print($problem . "\n");
 
 
-        $entry->delete(0, length($entry->get))
+        my $result =  eval $problem;
+        $entry->delete(0, length($entry->get));
+        $entry->insert(0, $result);
+
     },
 )->grid(-column=>3, -row=>0);
 
@@ -304,9 +315,10 @@ $calcGrid->Button(
 )->grid(-row=>3, -column=>0);
 
 $calcGrid->Button(
-    -text=>"ln",
+    #will do natural Log in perl
+    -text=>"log",
     -width => 3,
-    -command => sub{ $entry->insert(length($entry->get), 'ln(') },
+    -command => sub{ $entry->insert(length($entry->get), 'log(') },
 )->grid(-row=>4, -column=>0);
 
 $calcGrid->Button(
@@ -316,9 +328,9 @@ $calcGrid->Button(
 )->grid(-row=>5, -column=>0);
 
 $calcGrid->Button(
-    -text=>"sq",
+    -text=>"^",
     -width => 3,
-    -command => sub{ $entry->insert(length($entry->get), 'sq(') },
+    -command => sub{ $entry->insert(length($entry->get), '^(') },
 )->grid(-row=>6, -column=>0);
 
 ####################################################################################
