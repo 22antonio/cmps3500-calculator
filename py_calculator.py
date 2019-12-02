@@ -5,30 +5,28 @@
 # GUI expected but not required
 # =====================================================
 # Requirements:
-# Addition
-# Subtracion
-# Multiplication
-# Division
-# Sine - The input should be in degrees
-# Cosine - The input should be in degrees
-# Tangent - - The input should be in degrees
-# Exponential
-# Natural logarithm
-# Square root (sqrt)
-# Power of 2 (sq)
-# Decimal point
+# Addition &&
+# Subtracion &&
+# Multiplication &&
+# Division &&
+# Sine - The input should be in degrees &&
+# Cosine - The input should be in degrees &&
+# Tangent - - The input should be in degrees &&
+# Exponential &&
+# Natural logarithm &&
+# Square root (sqrt) &&
+# Power of 2 (sq) &&
+# Decimal point &&
 # positive to negative change (+/-)
 # Clear current input option (Clear)
-# Cancel or reset the calculator option (Cancel)
+# Cancel or reset the calculator option (Cancel) &&
 # =====================================================
-# TODO: make clear and cancel functions work
-# TODO: add cosine, tangent, exponetial
-# TODO: natural log, square root, power of 2
-# TODO: decimal point, positive to negative change
+# TODO: add clear
+# TODO: positive to negative change
 
-from tkinter import *
+from tkinter import *       # used for gui
 from tkinter import ttk
-from math import *
+from math import *          # for all mathmatic operations
 
 
 class Calculator:
@@ -38,12 +36,22 @@ class Calculator:
     add_trigger = False
     sub_trigger = False
     asin_trigger = False
+    acos_trigger = False
+    atan_trigger = False
+    exponential_trigger = False
+    natural_log_trigger = False
+    sqrt_trigger = False
+    sq_trigger = False
 
     def button_press(self, value):
         entry_val = self.number_entry.get()
         entry_val += value
         self.number_entry.delete(0, "end")
         self.number_entry.insert(0, entry_val)
+
+    def delete_button_press(self, value):
+        self.number_entry.delete(0, "end")
+        print("Clear Pressed")
 
     def isfloat(self, str_val):
         try:
@@ -59,6 +67,12 @@ class Calculator:
             self.mult_trigger = False
             self.div_trigger = False
             self.asin_trigger = False
+            self.acos_trigger = False
+            self.atan_trigger = False
+            self.exponential_trigger = False
+            self.natural_log_trigger = False
+            self.sqrt_trigger = False
+            self.sq_trigger = False
             self.calc_value = float(self.entry_value.get())
             if value == "/":
                 print("/ Pressed")
@@ -72,13 +86,31 @@ class Calculator:
             elif value == "sin":
                 print("sin pressed")
                 self.asin_trigger = True
+            elif value == "cos":
+                print("cos pressed")
+                self.acos_trigger = True
+            elif value == "tan":
+                print("tan pressed")
+                self.atan_trigger = True
+            elif value == "expo":
+                print("exponential pressed")
+                self.exponential_trigger = True
+            elif value == "nlog":
+                print("natural log pressed")
+                self.natural_log_trigger = True
+            elif value == "sqrt":
+                print("square root pressed")
+                self.sqrt_trigger = True
+            elif value == "sq":
+                print("power of 2 pressed")
+                self.sq_trigger = True
             else:
                 print("- Pressed")
                 self.sub_trigger = True
             self.number_entry.delete(0, "end")
 
     def equal_button_press(self):
-        if self.add_trigger or self.sub_trigger or self.mult_trigger or self.div_trigger or self.asin_trigger:
+        if self.add_trigger or self.sub_trigger or self.mult_trigger or self.div_trigger or self.asin_trigger or self.acos_trigger or self.atan_trigger or self.exponential_trigger or self.natural_log_trigger or self.sqrt_trigger or self.sq_trigger:
 
             if self.add_trigger:
                 solution = self.calc_value + float(self.entry_value.get())
@@ -88,6 +120,19 @@ class Calculator:
                 solution = self.calc_value * float(self.entry_value.get())
             elif self.asin_trigger:
                 solution = sin(float(self.calc_value))
+            elif self.acos_trigger:
+                solution = cos(float(self.calc_value))
+            elif self.atan_trigger:
+                solution = tan(float(self.calc_value))
+            elif self.exponential_trigger:
+                solution = pow(float(self.calc_value),
+                               float(self.entry_value.get()))
+            elif self.natural_log_trigger:
+                solution = log(float(self.calc_value))
+            elif self.sqrt_trigger:
+                solution = sqrt(float(self.calc_value))
+            elif self.sq_trigger:
+                solution = pow(float(self.calc_value), 2)
             else:
                 solution = self.calc_value / float(self.entry_value.get())
 
@@ -161,8 +206,8 @@ class Calculator:
 
         # ----- 4th Row -----
 
-        self.button_clear = ttk.Button(
-            root, text="AC", command=lambda: self.button_press('AC')).grid(row=4, column=0)
+        self.button_cancel = ttk.Button(
+            root, text="cancel", command=lambda: self.delete_button_press('cancel')).grid(row=4, column=0)
 
         self.button0 = ttk.Button(
             root, text="0", command=lambda: self.button_press('0')).grid(row=4, column=1)
@@ -176,6 +221,28 @@ class Calculator:
         # ------- 5th Row -------
         self.button_asin = ttk.Button(
             root, text="sin", command=lambda: self.math_button_press('sin')).grid(row=5, column=0)
+
+        self.button_acos = ttk.Button(
+            root, text="cos", command=lambda: self.math_button_press('cos')).grid(row=5, column=1)
+
+        self.button_atan = ttk.Button(
+            root, text="tan", command=lambda: self.math_button_press('tan')).grid(row=5, column=2)
+
+        self.button_decimal = ttk.Button(
+            root, text=".", command=lambda: self.button_press('.')).grid(row=5, column=3)
+
+        # ------- 6th Row -------
+        self.button_exponential = ttk.Button(
+            root, text="^", command=lambda: self.math_button_press('expo')).grid(row=6, column=0)
+
+        self.button_natural_log = ttk.Button(
+            root, text="ln", command=lambda: self.math_button_press('nlog')).grid(row=6, column=1)
+
+        self.button_sqrt = ttk.Button(
+            root, text="sqrt", command=lambda: self.math_button_press('sqrt')).grid(row=6, column=2)
+
+        self.button_sq = ttk.Button(
+            root, text="^2", command=lambda: self.math_button_press('sq')).grid(row=6, column=3)
 
 
 root = Tk()
