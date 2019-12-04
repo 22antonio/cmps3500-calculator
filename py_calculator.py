@@ -17,7 +17,7 @@
 # Square root (sqrt) &&
 # Power of 2 (sq) &&
 # Decimal point &&
-# positive to negative change (+/-)
+# positive to negative change (+/-) &&
 # Clear current input option (Clear)
 # Cancel or reset the calculator option (Cancel) &&
 # =====================================================
@@ -42,6 +42,7 @@ class Calculator:
     natural_log_trigger = False
     sqrt_trigger = False
     sq_trigger = False
+    sign_trigger = False
 
     def button_press(self, value):
         entry_val = self.number_entry.get()
@@ -51,7 +52,7 @@ class Calculator:
 
     def delete_button_press(self, value):
         self.number_entry.delete(0, "end")
-        print("Clear Pressed")
+        print("Cancel Pressed")
 
     def isfloat(self, str_val):
         try:
@@ -73,6 +74,7 @@ class Calculator:
             self.natural_log_trigger = False
             self.sqrt_trigger = False
             self.sq_trigger = False
+            self.sign_trigger = False
             self.calc_value = float(self.entry_value.get())
             if value == "/":
                 print("/ Pressed")
@@ -104,13 +106,16 @@ class Calculator:
             elif value == "sq":
                 print("power of 2 pressed")
                 self.sq_trigger = True
+            elif value == "+/-":
+                print("sign_changed pressed")
+                self.sign_trigger = True
             else:
                 print("- Pressed")
                 self.sub_trigger = True
             self.number_entry.delete(0, "end")
 
     def equal_button_press(self):
-        if self.add_trigger or self.sub_trigger or self.mult_trigger or self.div_trigger or self.asin_trigger or self.acos_trigger or self.atan_trigger or self.exponential_trigger or self.natural_log_trigger or self.sqrt_trigger or self.sq_trigger:
+        if self.add_trigger or self.sub_trigger or self.mult_trigger or self.div_trigger or self.asin_trigger or self.acos_trigger or self.atan_trigger or self.exponential_trigger or self.natural_log_trigger or self.sqrt_trigger or self.sq_trigger or self.sign_trigger:
 
             if self.add_trigger:
                 solution = self.calc_value + float(self.entry_value.get())
@@ -133,6 +138,8 @@ class Calculator:
                 solution = sqrt(float(self.calc_value))
             elif self.sq_trigger:
                 solution = pow(float(self.calc_value), 2)
+            elif self.sign_trigger:
+                solution = float(self.calc_value) * -1
             else:
                 solution = self.calc_value / float(self.entry_value.get())
 
@@ -243,6 +250,12 @@ class Calculator:
 
         self.button_sq = ttk.Button(
             root, text="^2", command=lambda: self.math_button_press('sq')).grid(row=6, column=3)
+
+        # ------- 7th Row -------
+        self.button_sign_change = ttk.Button(
+            root, text="+/-", command=lambda: self.math_button_press('+/-')).grid(row=7, column=0)
+        # self.button_clear = ttk.Button(
+        #   root, text="clear", command=lambda: self.clear_button_press('clear')).grid(row=7, column=1)
 
 
 root = Tk()
