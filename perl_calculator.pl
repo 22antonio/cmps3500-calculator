@@ -262,10 +262,11 @@ $clearCancelOK->Button(
 
         print($problem . "\n");
 
-
         my $result =  eval $problem;
+
         $entry->delete(0, length($entry->get));
         $entry->insert(0, $result);
+        
 
     },
 )->grid(-column=>3, -row=>0);
