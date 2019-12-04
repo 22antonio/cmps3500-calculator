@@ -2,10 +2,6 @@
 # must have perl-tk install
 # sudo apt-get install perl-tk
 
-# must have https://metacpan.org/pod/Math::Expression::Evaluator
-
-#todo parse input and make it compute based on parsed input
-
 use Tk;
 use strict;
 use Math::Trig;
