@@ -13,22 +13,11 @@ $mw->optionAdd('*font', 'Helvetica 30');
 my $entry = $mw->Entry(-width => 40) -> pack;
 
 
-#Placing Calculator Sections within a grd
-#my $mainGrid = $mw->Frame()->grid(-row=>10, -column=>10);
-
-#$mainGrid->pack;
-
 my $calcGrid = $mw->Frame()->grid(
     -row => 6,
     -column => 5
 );
 
-##############################################################################################
-# Numbers Frame/grid
-# my $numbers = $mw->Frame() -> grid(
-#     -row => 3,
-#     -column => 4,
-#      );
 
 $calcGrid->Button(
     -text => '(',
@@ -124,25 +113,13 @@ $calcGrid ->Button(
         }else{
             $tempString = $entry->get;
             $entry->delete(0, length($entry->get));
-            $entry->insert(0, '-');
-            $entry->insert(1, $tempString);
+            $entry->insert(0, '-(');
+            $entry->insert(2, $tempString);
+            $entry->insert(length($entry->get), ')');
         }
     },
 )->grid(-row => 6, -column => 3);
 
-# my $cols;
-# my $rows; 
-# ($cols, $rows) = $numbers->gridSize();
-# print $cols . $rows;
-
-# for(my $i = 0; $i < $cols; $i++){
-#     $numbers->gridColumnconfigure($i, -weight => 4);
-# }
-
-
-#################################################################################
-
-# my $trig = $mw->Frame()->grid(-row=>1 , -column=>3);
 
 $calcGrid->Button(
     -text=> 'sin',
@@ -164,11 +141,6 @@ $calcGrid->Button(
 )->grid(-row=> 2, -column => 2);
 
 # ##############################################################################
-
-# my $basicOperations = $mw->Frame()->grid(
-#     -row=>4, 
-#     -column=>1
-#     );
 
 $calcGrid->Button(
     -text=> '/',
@@ -206,7 +178,6 @@ $clearCancelOK->Button(
     -width => 5,
     -padx => 21,
     -command => sub{ 
-        # TODO some sort of parsing to update to value
 
         my @temp = split(/(\()|(\))|(\*)|(-)|(\+)|(\/)|(\d+\.?\d*)|(tan)|(sin)|(cos)|(exp)|(ln)|(sqrt)|(^)|/,$entry->get);
         my @equation;
@@ -244,9 +215,6 @@ $clearCancelOK->Button(
             }
         }
     
-
-        print(@equation);
-        print("\n");
 
         my $problem = "";
 
@@ -299,11 +267,6 @@ $clearCancelOK->Button(
     },
 )->grid(-column=>1, -row=>0);
 # ####################################################################################
-
-# my $functions = $mw->Frame()->grid(
-#     -row=>4,
-#     -column=>1
-#      );
 
 $calcGrid->Button(
     -text=> "exp",
