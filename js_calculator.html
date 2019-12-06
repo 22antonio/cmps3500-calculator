@@ -360,7 +360,9 @@
 
           if (target.classList.contains("flipSign")) {
             calculator.displayValue = -1 * parseFloat(calculator.displayValue);
-            calculator.firstOperand = parseFloat(calculator.displayValue);
+            if(calculator.waitingForSecondOperand === true){
+              calculator.firstOperand = parseFloat(calculator.displayValue);
+            }
             updateDisplay();
             return;
           }
