@@ -1,7 +1,7 @@
 #!/usr/bin/perl -w  
 # must have perl-tk install
 # sudo apt-get install perl-tk
-
+ 
 use Tk;
 use strict;
 use Math::Trig;

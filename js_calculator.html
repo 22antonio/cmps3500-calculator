@@ -21,7 +21,7 @@
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      width: 400px;
+      width: 500px;
     }
 
     .calculator-screen {
@@ -65,53 +65,73 @@
       color: #337cac;
     }
 
+    .mathFunction {
+      color: #337cac;
+    }
+
     .column-one {
-       grid-column-start: 1;
+
+       grid-area: auto / 1;
     }
 
     .column-two {
-      grid-columns-start: 2;
+       grid-area: auto /  2;
     }
 
     .column-three {
-      grid-columns-start: 3;
+       grid-area: auto /  3;
     }
 
     .column-four {
-      grid-columns-start: 4;
+       grid-area: auto /  4;
     }
 
     .column-five {
-      grid-columns-start: 5;
+       grid-area: auto /  5;
+    }
+
+    .column-six {
+       grid-area: auto /  6;
     }
 
     .row-one {
-      grid-row-start: 1;
+      grid-area: 1;
     }
 
     .row-two {
-      grid-row-start: 2;
+      grid-area: 2;
     }
 
     .row-three {
-      grid-row-start: 3;
+      grid-area: 3;
     }
 
     .row-four {
-      grid-row-start: 4;
+      grid-area: 4;
     }
 
     .row-five {
-      grid-row-start: 5;
+      grid-area: 5;
     }
 
     .all-clear {
       background-color: #f0595f;
       border-color: #b0353a;
       color: #fff;
+
     }
 
     .all-clear:hover {
+      background-color: #f17377;
+    }
+
+    .cancel{
+      background-color: #f0595f;
+      border-color: #b0353a;
+      color: #fff;
+    }
+
+    .cancel:hover {
       background-color: #f17377;
     }
 
@@ -120,10 +140,9 @@
       border-color: #337cac;
       color: #fff;
       height: 100%;
-      
-       // grid-area: 2 / 4 / 6 / 5; 
-     
+      grid-area: 2 / 6 / 6 / 6; 
     }
+
 
     .equal-sign:hover {
       background-color: #4e9ed4;
@@ -131,7 +150,7 @@
 
     .calculator-keys {
       display: grid;
-      grid-template-columns: repeat(5, 1fr);
+      grid-template-columns: repeat(6, 1fr);
       grid-gap: 20px;
       padding: 20px;
     }
@@ -142,13 +161,15 @@
     <input type="text" class="calculator-screen" value="" disabled />
 
     <div class="calculator-keys">
-      <button type="button" class="operator row-one column-one" value="sin">sin</button>
-      <button type="button" class="operator row-one column-two" value="cos">cos</button>
-      <button type="button" class="operator row-one column-three" value="tan">tan</button>
-      <button type="button" class="operator row-four column-one" value="exp">exp</button>
-      <button type="button" class="operator row-five column-one" value="ln">ln</button>
-      <button type="button" class="operator row-two column-one" value="sq">sq</button>
-      <button type="button" class="operator row-three column-two" value="sqrt">sqrt</button>
+
+
+      <button type="button" class="mathFunction row-one column-one" value="sin">sin</button>
+      <button type="button" class="mathFunction row-one column-two" value="cos">cos</button>
+      <button type="button" class="mathFunction row-one column-three" value="tan">tan</button>
+      <button type="button" class="mathFunction row-four column-one" value="exp">exp</button>
+      <button type="button" class="mathFunction row-five column-one" value="ln">ln</button>
+      <button type="button" class="mathFunction row-two column-one" value="sq">sq</button>
+      <button type="button" class="mathFunction row-three column-two" value="sqrt">sqrt</button>
       
 
       <button type="button" class="row-two column-two" value="7">7</button>
@@ -163,27 +184,36 @@
       <button type="button" class="row-four column-two" value="1">1</button>
       <button type="button" class="row-four column-three" value="2">2</button>
       <button type="button" class="row-four column-four" value="3">3</button>
-      <button type="button" class="row-five column-four row-five" value="+/-">+/-</button>
 
+      <button type="button" class="flipSign row-five column-four row-five" value="+/-">+/-</button>
       <button type="button" class="row-five column-three" value="0">0</button>
       <button type="button" class="decimal row-five column-two" value=".">.</button>
-      <button type="button" class="all-clear row-one column-four" value="all-clear">AC</button>
+      <button type="button" class="operator row-one column-four" value="power">^</button>
+      <button type="button" class="cancel row-one column-five" value="cancel">C</button>
+
+      <button type="button" class="all-clear row-one column-six" value="all-clear">AC</button>
 
       <button type="button" class="operator row-two column-five" value="+">+</button>
       <button type="button" class="operator row-three column-five" value="-">-</button>
+      <button type="button" class="equal-sign operator row-one column-six" value="=">=</button> 
       <button type="button" class="operator row-four column-five" value="*">&times;</button>
       <button type="button" class="operator row-five column-five" value="/">&divide;</button>
+<!--
 
-     
+-->
+    
 
 
-       <button type="button" class="equal-sign operator row-one column-five" value="=">=</button> 
+
       <script>
+
         const calculator = {
           displayValue: "0",
           firstOperand: null,
           waitingForSecondOperand: false,
-          operator: null
+          operator: null,
+          functionBool : false,
+          functionResult: 0,
         };
 
         function inputDigit(digit) {
@@ -199,18 +229,33 @@
         }
 
         function inputDecimal(dot) {
-          if (calculator.waitingForSecondOperand === true) return;
+
+          //if (calculator.waitingForSecondOperand === true) return;
+          calculator.waitingForSecondOperand = false;
 
           // If the `displayValue` does not contain a decimal point
           if (!calculator.displayValue.includes(dot)) {
             // Append the decimal point
             calculator.displayValue += dot;
+
           }
         }
 
         function handleOperator(nextOperator) {
           const { firstOperand, displayValue, operator } = calculator;
-          const inputValue = parseFloat(displayValue);
+          var inputValue = parseFloat(displayValue);
+
+
+          if(calculator.functionBool == true){
+            calculator.functionBool = false;
+            calculator.displayValue = String(calculator.functionResult);
+            calculator.firstOperand = parseFloat(calculator.displayValue);
+            return;
+          }else{
+            calculator.functionBool = false;
+          }
+
+
 
           if (operator && calculator.waitingForSecondOperand) {
             calculator.operator = nextOperator;
@@ -243,8 +288,32 @@
 
           "-": (firstOperand, secondOperand) => firstOperand - secondOperand,
 
-          "=": (firstOperand, secondOperand) => secondOperand
+          "power": (firstOperand, secondOperand) => Math.pow(firstOperand, secondOperand),
+          
+          "=": (firstOperand, secondOperand) => secondOperand,
+
         };
+
+        function handleFunction(functionInput){
+
+            const {displayValue, operator} = calculator;
+            const inputValue = parseFloat(displayValue);
+            calculator.functionResult = performFunction[functionInput](inputValue);
+            calculator.functionBool = true;
+           
+        }
+
+        const performFunction = {
+            "sin": (firstOperand) => Math.sin(firstOperand * (Math.PI / 180)),
+            "cos": (firstOperand) => Math.cos(firstOperand * (Math.PI / 180)),
+            "tan": (firstOperand) => Math.tan(firstOperand * (Math.PI / 180)),
+            "sq":  (firstOperand) => Math.pow(firstOperand, 2),
+            "sqrt":(firstOperand) => Math.sqrt(firstOperand),
+            "exp": (firstOperand) => Math.exp(firstOperand),
+            "ln":  (firstOperand) => Math.log(firstOperand),
+            
+
+        }
 
         function resetCalculator() {
           calculator.displayValue = "0";
@@ -261,14 +330,49 @@
         updateDisplay();
 
         const keys = document.querySelector(".calculator-keys");
+        // POSSIBLE TODO MAKE THESE NOT GLOBAL
+        var lastInput = null;
+        var lastValue = "0";
         keys.addEventListener("click", event => {
           const { target } = event;
+
           if (!target.matches("button")) {
             return;
           }
 
+          // cancel will go back to the previous number and clear the
+          // operation performed on it
+          if(target.classList.contains("cancel")){
+            calculator.displayValue = lastValue;
+            calculator.firstOperand = parseFloat(lastValue);
+            calculator.waitingForSecondOperand = true;
+            lastInput = null;
+            lastValue = "0";
+            updateDisplay();
+            return;
+          }
+
+
+          if(!target.classList.contains("equal-sign")){
+            lastInput = target.value;
+            lastValue = calculator.displayValue;
+          }
+
+          if (target.classList.contains("flipSign")) {
+            calculator.displayValue = -1 * parseFloat(calculator.displayValue);
+            updateDisplay();
+            return;
+          }
+
+
           if (target.classList.contains("operator")) {
             handleOperator(target.value);
+            updateDisplay();
+            return;
+          }
+
+          if (target.classList.contains("mathFunction")) {
+            handleFunction(target.value);
             updateDisplay();
             return;
           }
