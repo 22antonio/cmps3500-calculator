@@ -235,20 +235,6 @@ $clearCancelOK->Button(
     },
 )->grid(-column=>3, -row=>0);
 
-#shift grabs argument 1, should only be 1 arg to function
-sub checkPrecedence{
-    my $toCheck = shift;
-    my $precedenceToRet = 1;
-    if ($toCheck eq '*' or $toCheck eq '/'){
-        $precedenceToRet = 3;
-    }
-    elsif($toCheck eq '+' or $toCheck eq '-'){
-        $precedenceToRet = 2;
-    }
-
-    return $precedenceToRet;
-}
-
 $clearCancelOK->Button(
     -text=> 'Cancel',
     -width => 5,
