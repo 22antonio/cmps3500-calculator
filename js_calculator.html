@@ -245,7 +245,7 @@
           const { firstOperand, displayValue, operator } = calculator;
           const inputValue = parseFloat(displayValue);
 
-          // this is basically so hitting "=" will do the function.
+          // this is basically so hitting "=" will do the function if theres a function that just got hit.
           if(calculator.functionBool == true){
             calculator.functionBool = false;
             calculator.displayValue = String(calculator.functionResult);
@@ -326,10 +326,28 @@
           display.value = calculator.displayValue;
         }
 
+        function cancelLastInput(){
+            calculator.displayValue = lastValue;
+            calculator.firstOperand = parseFloat(lastValue);
+            calculator.waitingForSecondOperand = true;
+            if (calculator.functionBool == true) {
+              calculator.functionBool = false;
+            }
+            lastInput = null;
+            lastValue = "0";
+        }
+
+        function flipSign(){
+          calculator.displayValue = -1 * parseFloat(calculator.displayValue);
+          if (calculator.waitingForSecondOperand === true) {
+            calculator.firstOperand = parseFloat(calculator.displayValue);
+          }
+        }
+
         updateDisplay();
 
         const keys = document.querySelector(".calculator-keys");
-        // POSSIBLE TODO MAKE THESE NOT GLOBAL
+      
         var lastInput = null;
         var lastValue = "0";
         keys.addEventListener("click", event => {
@@ -342,14 +360,7 @@
           // cancel will go back to the previous number and clear the
           // operation performed on it
           if(target.classList.contains("cancel")){
-            calculator.displayValue = lastValue;
-            calculator.firstOperand = parseFloat(lastValue);
-            calculator.waitingForSecondOperand = true;
-            if(calculator.functionBool == true){
-              calculator.functionBool = false;
-            }
-            lastInput = null;
-            lastValue = "0";
+            cancelLastInput();
             updateDisplay();
             return;
           }
@@ -361,10 +372,7 @@
           }
 
           if (target.classList.contains("flipSign")) {
-            calculator.displayValue = -1 * parseFloat(calculator.displayValue);
-            if(calculator.waitingForSecondOperand === true){
-              calculator.firstOperand = parseFloat(calculator.displayValue);
-            }
+            flipSign();
             updateDisplay();
             return;
           }
