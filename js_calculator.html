@@ -243,9 +243,9 @@
 
         function handleOperator(nextOperator) {
           const { firstOperand, displayValue, operator } = calculator;
-          var inputValue = parseFloat(displayValue);
+          const inputValue = parseFloat(displayValue);
 
-
+          // this is basically so hitting "=" will do the function.
           if(calculator.functionBool == true){
             calculator.functionBool = false;
             calculator.displayValue = String(calculator.functionResult);
@@ -312,7 +312,6 @@
             "exp": (firstOperand) => Math.exp(firstOperand),
             "ln":  (firstOperand) => Math.log(firstOperand),
             
-
         }
 
         function resetCalculator() {
@@ -346,6 +345,9 @@
             calculator.displayValue = lastValue;
             calculator.firstOperand = parseFloat(lastValue);
             calculator.waitingForSecondOperand = true;
+            if(calculator.functionBool == true){
+              calculator.functionBool = false;
+            }
             lastInput = null;
             lastValue = "0";
             updateDisplay();
