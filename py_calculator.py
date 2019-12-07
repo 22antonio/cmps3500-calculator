@@ -2,34 +2,19 @@
 # Name: Antonio-Angel Medel & Joey Shafer
 # CMPS 3500 HW 10
 # build a scientific calculator in python
-# GUI expected but not required
-# =====================================================
-# Requirements:
-# Addition &&
-# Subtracion &&
-# Multiplication &&
-# Division &&
-# Sine - The input should be in degrees &&
-# Cosine - The input should be in degrees &&
-# Tangent - - The input should be in degrees &&
-# Exponential &&
-# Natural logarithm &&
-# Square root (sqrt) &&
-# Power of 2 (sq) &&
-# Decimal point &&
-# positive to negative change (+/-) &&
-# Clear current input option (Clear)
-# Cancel or reset the calculator option (Cancel) &&
+# !! requires python 3 !!
 # =====================================================
 # TODO: add clear
-# TODO: positive to negative change
 
 from tkinter import *       # used for gui
 from tkinter import ttk
 from math import *          # for all mathmatic operations
 
+# Calculator class does all required math operations
+
 
 class Calculator:
+
     calc_value = 0.0
     div_trigger = False
     mult_trigger = False
@@ -44,16 +29,19 @@ class Calculator:
     sq_trigger = False
     sign_trigger = False
 
+    # function for inserting numbers into calculator
     def button_press(self, value):
         entry_val = self.number_entry.get()
         entry_val += value
         self.number_entry.delete(0, "end")
         self.number_entry.insert(0, entry_val)
 
+    # function for canceling entire input
     def delete_button_press(self, value):
         self.number_entry.delete(0, "end")
         print("Cancel Pressed")
 
+    # function to ensure values are floats. Takes in string converts to float
     def isfloat(self, str_val):
         try:
             float(str_val)
@@ -61,6 +49,7 @@ class Calculator:
         except ValueError:
             return False
 
+    # function to ensure the appropriate math operation is performed
     def math_button_press(self, value):
         if self.isfloat(str(self.number_entry.get())):
             self.add_trigger = False
@@ -114,6 +103,7 @@ class Calculator:
                 self.sub_trigger = True
             self.number_entry.delete(0, "end")
 
+    # perform the approriate math operation defined in above function
     def equal_button_press(self):
         if self.add_trigger or self.sub_trigger or self.mult_trigger or self.div_trigger or self.asin_trigger or self.acos_trigger or self.atan_trigger or self.exponential_trigger or self.natural_log_trigger or self.sqrt_trigger or self.sq_trigger or self.sign_trigger:
 
@@ -150,6 +140,7 @@ class Calculator:
 
             self.number_entry.insert(0, solution)
 
+    # creation of the calculator GUI
     def __init__(self, root):
         self.entry_value = StringVar(root, value="")
         root.title("Calculator")
